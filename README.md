@@ -21,6 +21,15 @@ Indice:
 ### Diagrama
 
 ## Simulaciones 
+<p align="center">
+  <img src=".github/resta,png" alt="Montaje del laboratorio digital" width="450">
+</p>
+
+
+
+
+
+
 
 ## Implementación
 
