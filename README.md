@@ -26,7 +26,9 @@ Indice:
 </p>
 
 
-
+<p align="center">
+  <img src=".github/simulacion alu.png" alt="Montaje del laboratorio digital" width="450">
+</p>
 
 
 
