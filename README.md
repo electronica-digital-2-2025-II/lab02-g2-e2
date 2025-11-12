@@ -3,7 +3,8 @@
 # Lab02 - Unidad Aritmético-Lógica.
 
 # Integrantes
-
+Juan Mateo jimenez
+Pablo Cesar Rincon
 # Informe
 
 Indice:
