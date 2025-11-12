@@ -328,4 +328,34 @@ El montaje permitió visualizar de manera práctica la interacción entre el con
 
 ## Conclusiones
 
+La implementación de la **Unidad Aritmético-Lógica (ALU) de 4 bits** permitió comprender de forma práctica el funcionamiento de los módulos aritméticos y lógicos que componen la base de un procesador.  
+A lo largo del desarrollo se integraron distintos bloques funcionales, tanto combinacionales como secuenciales, y se logró comprobar su correcto desempeño tanto en simulación como en hardware real.
+
+Entre los principales resultados obtenidos se destacan:
+
+1. **Funcionamiento modular exitoso:**  
+   El diseño se estructuró de manera jerárquica, integrando módulos independientes (`sum_res4b`, `mult4b`, `Cor`, `Move`, `comp8b`), lo que facilitó la depuración y permitió validar cada operación de forma aislada antes de la integración final.
+
+2. **Correcta respuesta de las operaciones aritméticas y lógicas:**  
+   En simulación se verificó que la ALU ejecuta adecuadamente las cinco operaciones solicitadas (suma, resta, multiplicación, corrimiento y OR), manteniendo la coherencia de resultados y la estabilidad en las señales de salida.
+
+3. **Validación del comportamiento secuencial:**  
+   El módulo de multiplicación demostró un funcionamiento correcto bajo control de reloj (`clk`) y sincronización con la señal de inicio (`start`), evidenciando la diferencia entre la lógica combinacional y la lógica secuencial dentro de un mismo sistema.
+
+4. **Sincronización estable con la FPGA:**  
+   El uso de registros intermedios (`A_reg`, `B_reg`, `Sel_reg`) dentro del módulo `top_alu` permitió evitar lecturas erróneas o cambios no deseados durante la ejecución de las operaciones, asegurando resultados estables al presionar el botón `START`.
+
+5. **Verificación física satisfactoria:**  
+   La implementación en la tarjeta **Zybo Z7** junto con la **protoboard** permitió visualizar el resultado binario en los LEDs y comprobar experimentalmente el funcionamiento de las banderas `Overflow` y `Zero`.  
+   El montaje se comportó de manera robusta, sin errores lógicos ni inestabilidad en las señales.
+
+6. **Relevancia del diseño en el contexto de la arquitectura de procesadores:**  
+   La práctica reforzó el entendimiento del papel de la ALU como núcleo del *datapath* de un procesador, siendo responsable de la ejecución de las operaciones fundamentales que luego se combinan con unidades de control y memoria.
+
+---
+
+En conclusión, el laboratorio permitió consolidar conocimientos sobre diseño digital, manejo de señales secuenciales y combinacionales, y verificación de hardware mediante simulación y pruebas prácticas.  
+El proyecto demostró la importancia del diseño modular, la sincronización adecuada y la validación experimental como pasos esenciales dentro del ciclo de desarrollo de sistemas digitales complejos.
+
+
 ## Referencias
