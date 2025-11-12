@@ -60,18 +60,9 @@ Los módulos aritméticos (`sum_res4b`, `mult4b`) y los lógicos (`Cor`, `Move`)
 | `100` | **Operación lógica OR** | `Cor.v` | Realiza la operación lógica bit a bit OR entre `A` y `B`. |
 
 La lógica de selección de salida se define en un bloque `always @(*)`:
-
-```verilog
-always @(*) begin
-    case (Sel)
-        3'b000: Y = {4'b0000, Y_sr[3:0]};  // Suma
-        3'b001: Y = {4'b0000, Y_sr[3:0]};  // Resta
-        3'b010: Y = Y_mult;                // Multiplicación
-        3'b011: Y = Y_move;                // Corrimiento
-        3'b100: Y = Y_cor;                 // Operación OR
-        default: Y = 8'b00000000;          // Valor por defecto
-    endcase
-end
+<p align="center">
+  <img src=".github/parte codigo.png" alt="Montaje del laboratorio digital" width="450">
+</p>
 
 
 
