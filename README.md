@@ -168,6 +168,82 @@ El uso del botón de inicio permite un control estable y reproducible sobre las 
 
 ## Implementación
 
+La implementación del diseño se realizó sobre la **tarjeta de desarrollo Zybo Z7**, complementada con una **protoboard externa** donde se conectaron los indicadores visuales (LEDs) y los componentes auxiliares necesarios para la visualización y control de las señales del sistema.
+
+---
+
+### Conexión general del sistema
+
+El montaje físico se muestra en la siguiente figura:
+
+<p align="center">
+  <img src="images/montaje.jpg" alt="Implementación en FPGA Zybo Z7" width="600">
+</p>
+
+En la imagen se puede observar la interconexión directa entre la **FPGA** y la **protoboard**, donde se dispusieron los siguientes elementos:
+
+- **Tarjeta Zybo Z7**: encargada de ejecutar el diseño sintetizado de la ALU, generando y controlando las señales digitales correspondientes.  
+- **Protoboard externa**: utilizada para distribuir las salidas hacia **6 LEDs** de visualización y sus respectivas **resistencias limitadoras de corriente**.  
+- **Switches DIP**: empleados para definir los valores de los operandos `A`, `B` y el selector de operación `Sel`.  
+- **Botón de start**: conectado a una de las entradas de la FPGA para activar la captura de datos y la ejecución de la operación seleccionada.  
+
+El sistema completo se alimentó por el puerto micro-USB de la Zybo, el cual proporciona tanto la energía como la comunicación de programación a través del software **Vivado**.
+
+---
+
+### Asignación de pines y señales
+
+Durante la síntesis del diseño en **Vivado**, se definieron las asignaciones de pines correspondientes a los periféricos físicos:
+
+| Elemento | Señal FPGA | Descripción |
+|-----------|------------|--------------|
+| `swA[3:0]` | SW0–SW3 | Entradas para el operando A. |
+| `swB[3:0]` | SW4–SW7 | Entradas para el operando B. |
+| `swSel[2:0]` | SW8–SW10 | Selección de operación (`Sel`). |
+| `start_btn` | BTN0 | Botón de inicio de ejecución. |
+| `rst_btn` | BTN1 | Botón de reinicio general. |
+| `ledsY[7:0]` | LD0–LD7 | Salida principal del resultado (`Y`). |
+| `ledOver` | LD8 | Bandera de *Overflow*. |
+| `ledZero` | LD9 | Bandera de *Zero*. |
+
+Cada salida de la FPGA fue conectada a un LED de la protoboard a través de una resistencia de **330 Ω**, evitando sobrecorriente.  
+Las entradas de los switches fueron conectadas con **resistencias pull-down** para garantizar niveles lógicos definidos cuando no están activados.
+
+---
+
+### Procedimiento de carga y prueba
+
+1. Se sintetizó el proyecto completo en **Vivado 2023.2**, asegurando que todos los módulos (`alu.v`, `sum_res4b.v`, `mult4b.v`, `Cor.v`, `Move.v`, `Comp8b.v` y `top_alu.v`) se incluyeran en la jerarquía del diseño.  
+2. Una vez generados los archivos binarios (`.bit`), se realizó la **programación directa** de la tarjeta Zybo Z7 mediante conexión USB.  
+3. Con el circuito armado en la protoboard, se probaron múltiples combinaciones de entrada:
+   - Se configuraron los **switches de entrada** para asignar los operandos `A` y `B` (valores de 0 a 15).  
+   - Se seleccionó la operación deseada con `swSel`.  
+   - Al presionar el botón **START**, los valores fueron cargados en los registros internos y la operación fue ejecutada.  
+4. El resultado se visualizó en los **LEDs**, mostrando el valor binario de `Y`, mientras que los indicadores de estado (`ledOver`, `ledZero`) se encendieron según correspondiera al resultado obtenido.
+
+---
+
+### Comportamiento observado
+
+Durante la verificación en hardware, se comprobó que:
+
+- Las operaciones **suma, resta, OR y corrimiento** generaron respuestas inmediatas al presionar el botón `START`.  
+- La **multiplicación**, al ser una operación secuencial, presentó un retardo observable de algunos ciclos de reloj antes de actualizar la salida `Y`.  
+- Los indicadores **Overflow** y **Zero** respondieron de forma correcta ante condiciones de desbordamiento o resultado nulo.  
+- El sistema mantuvo estabilidad incluso al variar rápidamente los switches, gracias al registro interno de entradas que evita lecturas simultáneas durante la ejecución.
+
+---
+
+En conclusión, la implementación en la FPGA y protoboard demostró el funcionamiento correcto de la ALU bajo condiciones reales, validando la comunicación entre los módulos lógicos y el hardware físico.  
+El montaje permitió visualizar de manera práctica la interacción entre el control digital, la lógica combinacional y los procesos secuenciales de una unidad aritmético-lógica completa.
+
+
+
+
+
+
+
+
 ## Conclusiones
 
 ## Referencias
