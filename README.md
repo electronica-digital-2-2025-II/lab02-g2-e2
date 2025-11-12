@@ -163,6 +163,88 @@ El uso del botón de inicio permite un control estable y reproducible sobre las 
   <img src=".github/simulacion alu.png" alt="Montaje del laboratorio digital" width="450">
 </p>
 
+La verificación funcional del diseño se llevó a cabo mediante simulaciones en **GTKWave**, a partir de un **testbench desarrollado en Verilog** que aplicó diferentes combinaciones de entrada a los operandos `A` y `B`, junto con la señal de selección `Sel`.  
+El objetivo principal fue comprobar que la ALU respondiera correctamente a cada operación definida, verificando tanto el valor del resultado (`Y`) como el comportamiento de las banderas de estado (`Over` y `Zero`).
+
+---
+
+### Configuración de simulación
+
+El testbench (`tb_alu.v`) generó secuencias de estímulos sincronizados con la señal de reloj (`clk`), alternando las operaciones de forma progresiva.  
+Para cada caso de prueba, se inicializaron los valores de `A`, `B` y `Sel`, activando la señal de `start` para capturar los operandos dentro de la ALU y permitir su procesamiento interno.
+
+Durante la simulación, las señales se visualizaron en **GTKWave**, donde se analizaron las transiciones lógicas y temporales de los módulos `sum_res4b`, `mult4b`, `Cor`, `Move` y `comp8b`.
+
+---
+
+### Resultados de simulación (vista decimal)
+
+<p align="center">
+  <img src="images/simulacion_decimal.png" alt="Simulación ALU (vista decimal)" width="650">
+</p>
+
+En esta primera simulación se observa el comportamiento global de la ALU para diferentes operaciones, representadas en formato **decimal**.  
+Las señales principales (`A`, `B`, `Sel`, `Y`, `Over`, `Zero`, `start`, `clk`) se muestran en la traza temporal, evidenciando cómo el sistema cambia de operación según el código de selección:
+
+| Tiempo (ns) | `Sel` | Operación | A | B | Resultado `Y` | `Over` | `Zero` |
+|--------------|-------|------------|---|---|----------------|--------|---------|
+| 0–50 | `000` | **Suma** | 4 | 3 | 7 | 0 | 0 |
+| 50–100 | `001` | **Resta** | 5 | 5 | 0 | 0 | 1 |
+| 100–150 | `010` | **Multiplicación** | 3 | 2 | 6 | 0 | 0 |
+| 150–200 | `011` | **Corrimiento** | 4 | – | 8 | 0 | 0 |
+| 200–250 | `100` | **OR** | 5 | 3 | 7 | 0 | 0 |
+
+La simulación confirma que:
+- En **suma y resta**, las banderas `Over` y `Zero` cambian de forma correcta.  
+- En **multiplicación**, se evidencia el retardo secuencial típico del módulo `mult4b`, con la salida `Y` actualizándose una vez completado el ciclo de producto.  
+- El sistema mantiene estabilidad en las transiciones entre operaciones, sin generar valores intermedios erróneos.
+
+---
+
+### Resultados de simulación (vista binaria)
+
+<p align="center">
+  <img src="images/simulacion_binaria.png" alt="Simulación ALU (vista binaria)" width="650">
+</p>
+
+En esta segunda simulación se presentan los resultados en **formato binario**, centrados en las operaciones de **corrimiento lógico** y **OR**, donde el comportamiento bit a bit es más representativo.
+
+#### Corrimiento lógico (Sel = 011)
+Durante el intervalo correspondiente, se observa cómo los bits de entrada `A` se desplazan hacia la derecha en cada pulso de reloj, generando el patrón esperado en `Y`.  
+Por ejemplo, para `A = 0101` y una operación de desplazamiento, el resultado `Y = 1010` refleja correctamente la rotación o desplazamiento aplicado según el módulo `Move.v`.
+
+#### Operación lógica OR (Sel = 100)
+En esta etapa, la traza muestra la combinación lógica entre `A` y `B`.  
+Cuando `A = 0101` y `B = 0011`, el resultado `Y = 0111`, lo cual confirma que la operación OR bit a bit se ejecuta correctamente, activando los bits que se encuentran en estado alto en cualquiera de los operandos.
+
+---
+
+### Comprobación de banderas
+
+A lo largo de la simulación se verificó el funcionamiento de las banderas:
+- **`Over` (Overflow):** se activa únicamente en los casos de suma o resta donde el resultado excede el rango de 4 bits.  
+- **`Zero`:** se enciende cuando el resultado de la operación es igual a `00000000`.  
+
+Ambas banderas se comportaron conforme al diseño esperado, validando la correcta interacción entre los módulos de comparación (`comp8b`) y la lógica principal de la ALU.
+
+---
+
+### Conclusión de simulación
+
+Los resultados obtenidos en **GTKWave** confirman el comportamiento funcional esperado de la ALU:  
+- Todas las operaciones aritméticas y lógicas producen salidas coherentes con las entradas.  
+- Las banderas de estado responden correctamente.  
+- Las operaciones combinacionales muestran respuesta inmediata, mientras que la multiplicación introduce un retardo controlado por reloj.  
+
+Con ello, se validó completamente la etapa de simulación previa a la implementación en hardware.
+
+
+
+
+
+
+
+
 
 
 
