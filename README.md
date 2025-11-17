@@ -155,12 +155,12 @@ El uso del botón de inicio permite un control estable y reproducible sobre las 
 
 ## Simulaciones 
 <p align="center">
-  <img src=".github/resta.png" alt="Montaje del laboratorio digital" width="450">
+  <img src="images/aludecimal.jpg" alt="Simulaciones vista decimal" width="450">
 </p>
 
 
 <p align="center">
-  <img src=".github/simulacion alu.png" alt="Montaje del laboratorio digital" width="450">
+  <img src="images/alu binaria.jpg" alt="Simulaciones vista binaria" width="450">
 </p>
 
 La verificación funcional del diseño se llevó a cabo mediante simulaciones en **GTKWave**, a partir de un **testbench desarrollado en Verilog** que aplicó diferentes combinaciones de entrada a los operandos `A` y `B`, junto con la señal de selección `Sel`.  
@@ -178,10 +178,6 @@ Durante la simulación, las señales se visualizaron en **GTKWave**, donde se an
 ---
 
 ### Resultados de simulación (vista decimal)
-
-<p align="center">
-  <img src="images/simulacion_decimal.png" alt="Simulación ALU (vista decimal)" width="650">
-</p>
 
 En esta primera simulación se observa el comportamiento global de la ALU para diferentes operaciones, representadas en formato **decimal**.  
 Las señales principales (`A`, `B`, `Sel`, `Y`, `Over`, `Zero`, `start`, `clk`) se muestran en la traza temporal, evidenciando cómo el sistema cambia de operación según el código de selección:
@@ -204,7 +200,7 @@ La simulación confirma que:
 ### Resultados de simulación (vista binaria)
 
 <p align="center">
-  <img src="images/simulacion_binaria.png" alt="Simulación ALU (vista binaria)" width="650">
+  <img src="images/alu binaria.jpg" alt="Simulación ALU (vista binaria)" width="650">
 </p>
 
 En esta segunda simulación se presentan los resultados en **formato binario**, centrados en las operaciones de **corrimiento lógico** y **OR**, donde el comportamiento bit a bit es más representativo.
