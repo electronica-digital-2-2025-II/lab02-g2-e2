@@ -1,0 +1,95 @@
+`include "sum_res4b.v"
+`include "mult4b.v"
+`include "Cor.v"
+`include "Move.v"
+`include "Comp8b.v"
+
+module alu(
+    input       [3:0]A,
+    input       [3:0]B,
+    input       [2:0]Sel,
+    output reg  [7:0]Y,
+    output           Over,
+    output           Zero,
+    input            clk,
+    input            rst,
+    input            start,
+    input            mult_done
+);
+wire cout;
+wire compsum;
+wire compres;
+wire over_sum;
+wire mult_start;
+
+assign mult_start=(start && Sel==3'b010);
+
+wire [4:0]Y_sr;
+wire [7:0]Y_mult;
+wire [7:0]Y_move;
+wire [7:0]Y_cor;
+
+wire mult_busy;
+
+assign over_sum=compsum & Y_sr[4];
+assign over_res=compres&(Y_sr[3]^Y_sr[4]);
+assign Over=over_sum | over_res;
+
+sum_res4b F0(
+    .A({1'b0,A}),
+    .B({1'b0,B}),
+    .Cin(Sel[0]),
+    .Cout(cout),
+    .Res(Y_sr)
+    );
+comp8b C0(
+    .A(Sel),
+    .B(3'b000),
+    .Comp(compsum)
+    );
+comp8b C1(
+    .A(Sel),
+    .B(3'b001),
+    .Comp(compres)
+    );
+
+mult4b F2(
+    .clk(clk),
+    .rst(rst),
+    .start(mult_start),
+    .A(A),
+    .B(B),
+    .P(Y_mult),
+    .busy(mult_busy),
+    .done(mult_done)
+    );
+
+move F3(
+    .A(A),
+    .B(B),
+    .Amove(Y_move)
+);
+
+Cor F4(
+    .A(A),
+    .B(B),
+    .out(Y_cor)
+);
+
+comp8b C2(
+    .A(Y),
+    .B(8'b00000000),
+    .Comp(Zero)
+);
+always @(*)begin
+    case(Sel)
+    3'b000:Y={4'b0000,Y_sr[3:0]};//{{3{Y_sr[4]}},Y_sr};
+    3'b001:Y={4'b0000,Y_sr[3:0]};//{{3{Y_sr[4]}},Y_sr};
+    3'b010:Y=Y_mult;
+    3'b011:Y=Y_move;
+    3'b100:Y=Y_cor;
+    default: Y = 8'b00000000;
+    endcase 
+end
+
+endmodule
